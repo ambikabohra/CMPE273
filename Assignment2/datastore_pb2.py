@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='datastore.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\x0f\x64\x61tastore.proto\"\x17\n\x07Request\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\"8\n\x08Response\x12\x0b\n\x03key\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\x12\x11\n\toperation\x18\x01 \x01(\t\"$\n\x07PutData\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"\x19\n\nDeleteData\x12\x0b\n\x03key\x18\x01 \x01(\t\"$\n\x07getData\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"\x07\n\x05\x45mpty2\x89\x01\n\tDatastore\x12\"\n\x07message\x12\x08.Request\x1a\t.Response\"\x00\x30\x01\x12\x19\n\x03put\x12\x08.PutData\x1a\x06.Empty\"\x00\x12\x1f\n\x06\x64\x65lete\x12\x0b.DeleteData\x1a\x06.Empty\"\x00\x12\x1c\n\x06get_db\x12\x06.Empty\x1a\x08.getData\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0f\x64\x61tastore.proto\"\x17\n\x07Request\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\"8\n\x08Response\x12\x0b\n\x03key\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\x12\x11\n\toperation\x18\x01 \x01(\t\"$\n\x07PutData\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"\x19\n\nDeleteData\x12\x0b\n\x03key\x18\x01 \x01(\t\"$\n\x07getData\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"\"\n\x12Operation_Response\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t2\x85\x01\n\tDatastore\x12\"\n\x07message\x12\x08.Request\x1a\t.Response\"\x00\x30\x01\x12&\n\x03put\x12\x08.PutData\x1a\x13.Operation_Response\"\x00\x12,\n\x06\x64\x65lete\x12\x0b.DeleteData\x1a\x13.Operation_Response\"\x00\x62\x06proto3')
 )
 
 
@@ -208,13 +208,20 @@ _GETDATA = _descriptor.Descriptor(
 )
 
 
-_EMPTY = _descriptor.Descriptor(
-  name='Empty',
-  full_name='Empty',
+_OPERATION_RESPONSE = _descriptor.Descriptor(
+  name='Operation_Response',
+  full_name='Operation_Response',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='data', full_name='Operation_Response.data', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -228,7 +235,7 @@ _EMPTY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=205,
-  serialized_end=212,
+  serialized_end=239,
 )
 
 DESCRIPTOR.message_types_by_name['Request'] = _REQUEST
@@ -236,7 +243,7 @@ DESCRIPTOR.message_types_by_name['Response'] = _RESPONSE
 DESCRIPTOR.message_types_by_name['PutData'] = _PUTDATA
 DESCRIPTOR.message_types_by_name['DeleteData'] = _DELETEDATA
 DESCRIPTOR.message_types_by_name['getData'] = _GETDATA
-DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
+DESCRIPTOR.message_types_by_name['Operation_Response'] = _OPERATION_RESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Request = _reflection.GeneratedProtocolMessageType('Request', (_message.Message,), dict(
@@ -274,12 +281,12 @@ getData = _reflection.GeneratedProtocolMessageType('getData', (_message.Message,
   ))
 _sym_db.RegisterMessage(getData)
 
-Empty = _reflection.GeneratedProtocolMessageType('Empty', (_message.Message,), dict(
-  DESCRIPTOR = _EMPTY,
+Operation_Response = _reflection.GeneratedProtocolMessageType('Operation_Response', (_message.Message,), dict(
+  DESCRIPTOR = _OPERATION_RESPONSE,
   __module__ = 'datastore_pb2'
-  # @@protoc_insertion_point(class_scope:Empty)
+  # @@protoc_insertion_point(class_scope:Operation_Response)
   ))
-_sym_db.RegisterMessage(Empty)
+_sym_db.RegisterMessage(Operation_Response)
 
 
 try:
@@ -310,17 +317,12 @@ try:
       self.put = channel.unary_unary(
           '/Datastore/put',
           request_serializer=PutData.SerializeToString,
-          response_deserializer=Empty.FromString,
+          response_deserializer=Operation_Response.FromString,
           )
       self.delete = channel.unary_unary(
           '/Datastore/delete',
           request_serializer=DeleteData.SerializeToString,
-          response_deserializer=Empty.FromString,
-          )
-      self.get_db = channel.unary_unary(
-          '/Datastore/get_db',
-          request_serializer=Empty.SerializeToString,
-          response_deserializer=getData.FromString,
+          response_deserializer=Operation_Response.FromString,
           )
 
 
@@ -349,13 +351,6 @@ try:
       context.set_details('Method not implemented!')
       raise NotImplementedError('Method not implemented!')
 
-    def get_db(self, request, context):
-      # missing associated documentation comment in .proto file
-      pass
-      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-      context.set_details('Method not implemented!')
-      raise NotImplementedError('Method not implemented!')
-
 
   def add_DatastoreServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -367,17 +362,12 @@ try:
         'put': grpc.unary_unary_rpc_method_handler(
             servicer.put,
             request_deserializer=PutData.FromString,
-            response_serializer=Empty.SerializeToString,
+            response_serializer=Operation_Response.SerializeToString,
         ),
         'delete': grpc.unary_unary_rpc_method_handler(
             servicer.delete,
             request_deserializer=DeleteData.FromString,
-            response_serializer=Empty.SerializeToString,
-        ),
-        'get_db': grpc.unary_unary_rpc_method_handler(
-            servicer.get_db,
-            request_deserializer=Empty.FromString,
-            response_serializer=getData.SerializeToString,
+            response_serializer=Operation_Response.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -405,10 +395,6 @@ try:
       # missing associated documentation comment in .proto file
       pass
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
-    def get_db(self, request, context):
-      # missing associated documentation comment in .proto file
-      pass
-      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
 
 
   class BetaDatastoreStub(object):
@@ -433,11 +419,6 @@ try:
       pass
       raise NotImplementedError()
     delete.future = None
-    def get_db(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
-      # missing associated documentation comment in .proto file
-      pass
-      raise NotImplementedError()
-    get_db.future = None
 
 
   def beta_create_Datastore_server(servicer, pool=None, pool_size=None, default_timeout=None, maximum_timeout=None):
@@ -448,19 +429,16 @@ try:
     generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
     request_deserializers = {
       ('Datastore', 'delete'): DeleteData.FromString,
-      ('Datastore', 'get_db'): Empty.FromString,
       ('Datastore', 'message'): Request.FromString,
       ('Datastore', 'put'): PutData.FromString,
     }
     response_serializers = {
-      ('Datastore', 'delete'): Empty.SerializeToString,
-      ('Datastore', 'get_db'): getData.SerializeToString,
+      ('Datastore', 'delete'): Operation_Response.SerializeToString,
       ('Datastore', 'message'): Response.SerializeToString,
-      ('Datastore', 'put'): Empty.SerializeToString,
+      ('Datastore', 'put'): Operation_Response.SerializeToString,
     }
     method_implementations = {
       ('Datastore', 'delete'): face_utilities.unary_unary_inline(servicer.delete),
-      ('Datastore', 'get_db'): face_utilities.unary_unary_inline(servicer.get_db),
       ('Datastore', 'message'): face_utilities.unary_stream_inline(servicer.message),
       ('Datastore', 'put'): face_utilities.unary_unary_inline(servicer.put),
     }
@@ -476,19 +454,16 @@ try:
     generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
     request_serializers = {
       ('Datastore', 'delete'): DeleteData.SerializeToString,
-      ('Datastore', 'get_db'): Empty.SerializeToString,
       ('Datastore', 'message'): Request.SerializeToString,
       ('Datastore', 'put'): PutData.SerializeToString,
     }
     response_deserializers = {
-      ('Datastore', 'delete'): Empty.FromString,
-      ('Datastore', 'get_db'): getData.FromString,
+      ('Datastore', 'delete'): Operation_Response.FromString,
       ('Datastore', 'message'): Response.FromString,
-      ('Datastore', 'put'): Empty.FromString,
+      ('Datastore', 'put'): Operation_Response.FromString,
     }
     cardinalities = {
       'delete': cardinality.Cardinality.UNARY_UNARY,
-      'get_db': cardinality.Cardinality.UNARY_UNARY,
       'message': cardinality.Cardinality.UNARY_STREAM,
       'put': cardinality.Cardinality.UNARY_UNARY,
     }

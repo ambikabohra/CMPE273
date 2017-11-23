@@ -29,14 +29,7 @@ class MyDatastoreServicer(datastore_pb2.DatastoreServicer):
         print("Slave connected")
         while True:
             new_operation = self.new_queue.get()
-            print("Sending data (operation, key, data) to client/slave")
             yield new_operation
-
-    def get(self, request, context):
-        print("Get {} from master db".format(request.key))
-        key = request.key
-        value = self.db.get(key.encode()) #get value from db
-        return datastore_pb2.Response(data=value)
 
 
     def put_slave(f):
@@ -63,20 +56,18 @@ class MyDatastoreServicer(datastore_pb2.DatastoreServicer):
 
     @put_slave
     def put(self, request, context):
-        #print("Put {}:{} to master db".format(request.key, request.data))
-        print("Put values to master db")
+        print("put " +request.key + " " + request.data + " from master db to slave")
         key = request.key
         data = request.data
-        self.db.put(key.encode(), data.encode())
-        return datastore_pb2.Empty()
+        self.db.put(key.encode(), data.encode()) #put in master db
+        return datastore_pb2.Operation_Response(data = "done")
 
     @delete_slave
     def delete(self, request, context):
-        #print("Delete this key from master db".format(request.key))
-        print("Delete this key from master db")
+        print("Delete "+ request.key +" key from master db to slave")
         key = request.key
-        self.db.delete(request.key.encode())
-        return datastore_pb2.Empty()
+        self.db.delete(key.encode()) #delete from master db
+        return datastore_pb2.Operation_Response(data = "done")
 
 def run(host, port):
     '''

@@ -1,5 +1,6 @@
 import argparse
 import grpc
+import uuid
 import datastore_pb2
 
 
@@ -23,19 +24,23 @@ def main():
     args = parser.parse_args()
     print("Client is connecting to Server at {}:{}...".format(args.host, PORT))
     test = TestClient(host=args.host)
+    #key = uuid.uuid4().hex
 
     print('Test 1: put function : key = key1 and value = Arya')
-    test.put("key1","Arya")
+    res = test.put("key1","Arya")
+    print(res)
 
     print("Test 2: put function : key = key2 and value = Parth")
-    test.put("key2","Parth")
-    
-    print("Test 4: delete function : key = key1 " )
-    test.delete("key1")
+    res = test.put("key2","Parth")
+    print(res)
 
-    print("Test 1: put function : key = key3 and value = Rachit")
-    test.put("key3", "Rachit")
+    print("Test 3: delete function : key = key1 " )
+    res = test.delete("key1")
+    print(res)
 
+    print("Test 4: put function : key = key3 and value = Rachit")
+    res = test.put("key3", "Rachit")
+    print(res)
     
 
 if __name__ == "__main__":
