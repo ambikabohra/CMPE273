@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+message Request {
+    string data = 1;
+}
+
+message Response {
+    string key = 2;
+    string data = 3;
+    string operation = 1;
+}
+
+message PutData {
+    string key = 1;
+    string data = 2;
+}
+
+message DeleteData {
+    string key = 1;
+}
+
+message getData {
+    string key = 1;
+    string data = 2;
+}
+
+message Empty{
+}
+
+service Datastore {
+   rpc message(Request) returns (stream Response) {}
+   rpc put(PutData) returns (Empty) {}
+   rpc delete(DeleteData) returns (Empty) {}
+   rpc get_db(Empty) returns (getData) {}
+}
